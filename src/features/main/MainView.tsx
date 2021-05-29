@@ -1,60 +1,119 @@
 //  ======================================== IMPORTS
 import React from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    currentPageSet,
+	currentPageSet,
 	getCharacters,
-    selectAsyncStatus,
+	selectAsyncError,
+	selectAsyncStatus,
 	selectCharacters,
 	selectCurrentPage,
-    selectFilters,
-    selectPages
+	selectFilters,
+	selectPages
 } from './mainSlice';
-import CharacterCard from 'features/main/CharacterCard'
-import Pagination from 'common/components/Pagination'
-import FilterSection from 'features/main/FilterSection'
+import CharacterCard from 'features/main/CharacterCard';
+import LoadingOverlay from 'common/components/LoadingOverlay';
+import Pagination from 'common/components/Pagination';
+import TopNav from 'common/components/TopNav';
+import ScrollUpBtn from 'common/components/ScrollUpBtn';
+import Sidebar from 'common/components/Sidebar';
+import { useDebounce } from 'use-debounce';
+import { useMediaQuery } from 'react-responsive';
+import { useScrollPosition } from '@n8tb1t/use-scroll-position';
 //  ======================================== COMPONENT
 const MainView = () => {
-	//  ======================================== HOOKS
-	const dispatch = useDispatch();
-
 	//  ======================================== STATE
-    const asyncStatus = useSelector(selectAsyncStatus)
-    const currentPage = useSelector(selectCurrentPage);
+	const [showScrollUpBtn, setShowScrollUpBtn] = React.useState(false);
+	const asyncError = useSelector(selectAsyncError);
+	const asyncStatus = useSelector(selectAsyncStatus);
 	const characters = useSelector(selectCharacters);
-    const pages = useSelector(selectPages);
-    const {name, gender, status} = useSelector(selectFilters)
+	const currentPage = useSelector(selectCurrentPage);
+	const isLoading = asyncStatus === 'pending';
+	const { name, gender, status } = useSelector(selectFilters);
+	const pages = useSelector(selectPages);
+	const [debouncedName] = useDebounce(name, 300);
+
+	//  ======================================== HOOKS
+	const isMd = useMediaQuery({ query: '(min-device-width: 720px)' });
+	const dispatch = useDispatch();
+	useScrollPosition(
+		({ currPos }) => {
+			const isFarFromTop = currPos.y < -700;
+			if (isFarFromTop === showScrollUpBtn) return;
+			if (isFarFromTop !== showScrollUpBtn)
+				setShowScrollUpBtn(isFarFromTop);
+		},
+		[showScrollUpBtn]
+	);
+
 	//  ======================================== HANDLERS
-    const handleSetPage = (page:number) => dispatch(currentPageSet(page))
+	const handleSetPage = (page: number) => {
+		dispatch(currentPageSet(page));
+		dispatch(getCharacters());
+	};
+	const handleScrollToTop = () =>
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+
 	//  ======================================== EFFECTS
 	React.useEffect(() => {
-        console.log('ran')
+		dispatch(currentPageSet(1));
 		dispatch(getCharacters());
-	}, [currentPage, name, gender, status]);
+	}, [debouncedName, gender, status]);
+
 	//  ======================================== JSX
 	return (
-		<Container>
-            <Row>
-                <Col xs={12} md={4}>
-                    <FilterSection/>
-                </Col>
-                <Col xs={12} md={8}>
-                <Row>
-				{characters.map(character => 
-					<Col key={character.id} xs={12} sm={6} lg={3} className='p-2'>
-						<CharacterCard character={character}/>
+		<div>
+			<TopNav withMenu />
+			<Container style={{ marginTop: '4rem' }}>
+				<Row className='py-4'>
+					{/* LEFT COLUMN */}
+					<Col xs={12} md={3}>
+						<Sidebar />
 					</Col>
-				)}
-			</Row>
-            <div className='d-flex justify-content-end'>
-
-            <Pagination currentPage={currentPage} pages={pages} setCurrent={handleSetPage} disabled={asyncStatus === 'pending'}/>
-            </div>
-                </Col>
-            </Row>
-
-		</Container>
+					{/* RIGHT COLUMN */}
+					<Col xs={12} md={9}>
+						<Row className='position-relative mb-2'>
+							{asyncError ? (
+								<Alert className='flex-grow-1' variant='danger'>
+									{asyncError}
+								</Alert>
+							) : characters.length ? (
+								characters.map((character) => (
+									<Col
+										key={character.id}
+										xs={12}
+										sm={6}
+										lg={3}
+										className='px-2 pb-2'>
+										<CharacterCard character={character} />
+									</Col>
+								))
+							) : (
+								<div>No matching results</div>
+							)}
+							{isLoading && <LoadingOverlay />}
+						</Row>
+						<div className='d-flex justify-content-end'>
+							{pages > 1 && (
+								<Pagination
+									currentPage={currentPage}
+									pages={pages}
+									setCurrent={handleSetPage}
+									disabled={asyncStatus === 'pending'}
+									maxPages={isMd ? 5 : 3}
+									size={!isMd ? 'sm' : undefined}
+								/>
+							)}
+						</div>
+					</Col>
+				</Row>
+			</Container>
+			<ScrollUpBtn
+				isVisible={showScrollUpBtn}
+				onClick={handleScrollToTop}
+			/>
+		</div>
 	);
 };
 

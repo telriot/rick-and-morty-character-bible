@@ -8,6 +8,7 @@ interface PaginationProps {
 	disabled?: boolean;
 	maxPages?: number;
 	pages: number;
+	size?: 'sm' | 'lg'
 	setCurrent: (page: number) => void;
 }
 const Pagination = ({
@@ -15,7 +16,8 @@ const Pagination = ({
 	disabled = false,
 	maxPages = 5,
 	pages,
-	setCurrent
+	setCurrent,
+	size
 }: PaginationProps) => {
 	//  ======================================== HOOKS
 	//  ======================================== STATE
@@ -35,7 +37,7 @@ const Pagination = ({
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
-		<BSPagination>
+		<BSPagination size={size}>
 			{currentPage !== 1 && (
 				<BSPagination.Prev
 					disabled={disabled}
@@ -56,7 +58,7 @@ const Pagination = ({
 			{pageIndexes.map((page) => (
 				<BSPagination.Item
 					key={`pagination-${page}`}
-					disabled={disabled}
+					disabled={disabled && page !==currentPage}
 					onClick={() => handlePageClick(page)}
 					active={page === currentPage}>
 					{page}

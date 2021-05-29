@@ -22,14 +22,22 @@ export type CharactersSearchFilters = {
 	status: CharacterStatus | null
 	gender: CharacterGender | null
 }
-export interface MainState {
+export interface SliceState {
 	asyncStatus: AsyncStatus
 	asyncError: string | null
+}
+export interface MainState extends SliceState {
+
+	cache:Record<string, CharacterAPIResponse | null>
 	currentPage: number
 	filters: CharactersSearchFilters
 	pages: number
 }
-
+export interface DetailState extends SliceState {
+	character: CharacterData | null
+	episodes: EpisodeData[] | null
+}
+export type GeographicalData =  {name:string, url:string}
 export type CharacterData = {
     id: number
     name: string
@@ -37,12 +45,21 @@ export type CharacterData = {
 	species: string
 	type: string
 	gender: CharacterGender
-	origin: object
-	location: object
+	origin: GeographicalData
+	location: GeographicalData
 	image: string
 	episode: string[]
 	url: string
 	created: string
+}
+export type EpisodeData = {
+	air_date: string
+	characters: string[]
+	created: Date
+	episode: string
+	id: number
+	name: string
+	url: string
 }
 export type CharacterAPIResponse = {
     info:{
@@ -53,3 +70,6 @@ export type CharacterAPIResponse = {
     },
     results: CharacterData[]
 }
+
+// OTHERS
+type FilterOptions<T> = Array<T | null>;
