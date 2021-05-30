@@ -16,17 +16,19 @@ const usePagination = (
 	const [showLast, setShowLast] = React.useState(false);
 	const [showStartEllipsis, setShowStartEllipsis] = React.useState(false);
 	const [showEndEllipsis, setShowEndEllipsis] = React.useState(false);
-
+	const [showBack, setShowBack] = React.useState(false)
+	const [showNext, setShowNext] = React.useState(false)
 	React.useEffect(() => {
 		const maxPagesBeforeCurrentPage = Math.floor(maxPages / 2);
 		const maxPagesAfterCurrentPage = Math.ceil(maxPages / 2) - 1;
 		const minPage = Math.max(1, currentPage - maxPagesBeforeCurrentPage);
 		const maxPage = Math.min(pages, currentPage + maxPagesAfterCurrentPage);
-
 		setShowFirst(currentPage - maxPagesBeforeCurrentPage > 1);
 		setShowLast(currentPage + maxPagesAfterCurrentPage < pages);
 		setShowStartEllipsis(currentPage - maxPagesBeforeCurrentPage > 2);
 		setShowEndEllipsis(currentPage + maxPagesAfterCurrentPage < pages - 1);
+		setShowBack(currentPage !== 1)
+		setShowNext(currentPage !== pages && pages<=maxPages)
 		const indexes: number[] = [];
 		for (let i = minPage; i <= maxPage; i++) {
 			indexes.push(i);
@@ -40,7 +42,9 @@ const usePagination = (
 		showFirst,
 		showLast,
 		showStartEllipsis,
-		showEndEllipsis
+		showEndEllipsis,
+		showBack,
+		showNext
 	};
 };
 

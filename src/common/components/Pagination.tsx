@@ -27,7 +27,9 @@ const Pagination = ({
 		showFirst,
 		showLast,
 		showStartEllipsis,
-		showEndEllipsis
+		showEndEllipsis,
+		showBack,
+		showNext
 	} = usePagination(currentPage, pages, maxPages);
 
 	//  ======================================== HANDLERS
@@ -38,7 +40,7 @@ const Pagination = ({
 	//  ======================================== JSX
 	return (
 		<BSPagination size={size}>
-			{currentPage !== 1 && (
+			{showBack && (
 				<BSPagination.Prev
 					disabled={disabled}
 					onClick={() =>
@@ -73,7 +75,7 @@ const Pagination = ({
 					{pages}
 				</BSPagination.Item>
 			)}
-			{currentPage !== pages && (
+			{showNext && (
 				<BSPagination.Next
 					onClick={() =>
 						handlePageClick(Math.min(pages, currentPage + 1))
