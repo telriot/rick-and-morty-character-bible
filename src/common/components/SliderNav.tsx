@@ -19,9 +19,8 @@ const SliderNav = ({ children, isOpen, onClose }: SliderNavProps) => {
 			style={{
 				top: '4rem',
 				left: 0,
-				background: `${isOpen ? 'rgba(0,0,0,.2)' : 'transparent'}`,
-				//@ts-ignore
-				pointerEvents: `${isOpen ? 'auto' : 'none'}`,
+				background: isOpen ? 'rgba(0,0,0,.2)' : 'transparent',
+				pointerEvents: isOpen ? 'auto' : 'none',
 				transition: 'background .3s',
 				zIndex: 1000
 			}}>
@@ -37,7 +36,7 @@ const SliderNav = ({ children, isOpen, onClose }: SliderNavProps) => {
 				className='h-100 px-2 py-3'
 				style={{
 					width: '4.5rem',
-					opacity: `${isOpen ? 1 : 0}`,
+					opacity: isOpen ? 1 : 0,
 					transform: `translateX(${isOpen ? '0%' : '100%'})`,
 					transition: 'transform .3s, opacity .3s'
 				}}>
