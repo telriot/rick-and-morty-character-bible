@@ -21,6 +21,7 @@ import Sidebar from 'common/components/Sidebar';
 import { useDebounce } from 'use-debounce';
 import { useMediaQuery } from 'react-responsive';
 import useScrollPosition from '@react-hook/window-scroll';
+import FullSectionSpinner from 'common/components/FullSectionSpinner';
 //  ======================================== COMPONENT
 const MainView = () => {
 	//  ======================================== STATE
@@ -89,10 +90,16 @@ const MainView = () => {
 										<CharacterCard character={character} />
 									</Col>
 								))
+							) : isLoading ? (
+								<div className='w-100'>
+									<FullSectionSpinner />
+								</div>
 							) : (
 								<div>No matching results</div>
 							)}
-							{isLoading && <LoadingOverlay />}
+							{characters.length && isLoading ? (
+								<LoadingOverlay />
+							) : null}
 						</Row>
 						<div className='d-flex justify-content-end'>
 							{pages > 1 && (
