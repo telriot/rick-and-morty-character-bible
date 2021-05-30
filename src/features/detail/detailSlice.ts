@@ -14,9 +14,11 @@ export const getCharacterDetail = createAsyncThunk<
 		const { character, episodes } = await fetchCharacterById(id);
 		return { data: { character, episodes }, error: null, success: true };
 	} catch (error) {
-		console.error(error);
+		const { status } = error.response;
 		return {
-			error: 'Something went wrong with our server',
+			data: { character:null, episodes:null },
+			error:
+				status === 404 ? 'Character not found' : 'Something went wrong with our server',
 			success: false
 		};
 	}

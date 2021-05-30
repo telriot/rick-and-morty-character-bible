@@ -8,11 +8,12 @@ import {
 	selectEpisodes,
 	selectAsyncError
 } from './detailSlice';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Alert, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
+import BackLink from 'common/components/BackLink'
 import TopNav from 'common/components/TopNav';
 import FullSectionSpinner from 'common/components/FullSectionSpinner';
-import parseDate from 'common/utils/parseDate'
+import parseDate from 'common/utils/parseDate';
 
 //  ======================================== COMPONENT
 const DetailView = () => {
@@ -42,6 +43,7 @@ const DetailView = () => {
 						<Alert className='w-100' variant='danger'>
 							{asyncError}
 						</Alert>
+						<BackLink />
 					</div>
 				) : character &&
 				  character.id === parseInt(id) &&
@@ -50,9 +52,8 @@ const DetailView = () => {
 						<Row className='py-4'>
 							{/* LEFT COLUMN */}
 							<Col md={3} className='flex-column'>
-								<Link to='/'>
-									<h6 className='mb-2'>&lsaquo; Back</h6>
-								</Link>
+								<BackLink />
+
 								<div>
 									<img
 										className='h-100 w-100 mb-4 mb-md-0'

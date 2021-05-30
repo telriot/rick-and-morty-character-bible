@@ -4,6 +4,8 @@ import { Navbar } from 'react-bootstrap';
 import Logo from 'common/components/Logo';
 import Filters from 'features/main/Filters';
 import SliderNav from './SliderNav';
+import { useMediaQuery } from 'react-responsive';
+
 //  ======================================== COMPONENT
 const TopNav = ({ withMenu }: { withMenu?: boolean }) => {
 	//  ======================================== HOOKS
@@ -11,6 +13,8 @@ const TopNav = ({ withMenu }: { withMenu?: boolean }) => {
 	const [open, setOpen] = React.useState(false);
 	//  ======================================== HANDLERS
 	const handleToggleClick = () => setOpen((prev) => !prev);
+	const isMd = useMediaQuery({ query: '(min-width: 720px)' });
+
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return withMenu ? (
@@ -23,9 +27,11 @@ const TopNav = ({ withMenu }: { withMenu?: boolean }) => {
 				<Navbar.Toggle onClick={handleToggleClick} />
 				<Logo />
 			</Navbar>
-			<SliderNav onClose={handleToggleClick} isOpen={open}>
-				<Filters />
-			</SliderNav>
+			{!isMd && (
+				<SliderNav onClose={handleToggleClick} isOpen={open}>
+					<Filters />
+				</SliderNav>
+			)}
 		</>
 	) : (
 		<Navbar

@@ -39,7 +39,7 @@ const MainView = () => {
 	const isMd = useMediaQuery({ query: '(min-width: 720px)' });
 	const dispatch = useDispatch();
 	const scrollY = useScrollPosition();
-	console.log(isMd);
+	
 	//  ======================================== HANDLERS
 	const handleSetPage = (page: number) => {
 		dispatch(currentPageSet(page));
