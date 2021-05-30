@@ -10,7 +10,7 @@ const Logo = () => {
 	return (
 		<div style={{ height: '3rem' }}>
 			<img
-				style={{ maxHeight: '100%' }}
+				style={{ height:'3rem', maxHeight: '100%' }}
 				src={logo}
 				alt='Rick and Morty logo'
 			/>

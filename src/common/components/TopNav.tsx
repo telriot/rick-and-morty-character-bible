@@ -3,7 +3,6 @@ import React from 'react';
 import { Navbar } from 'react-bootstrap';
 import Logo from 'common/components/Logo';
 import Filters from 'features/main/Filters';
-import { ReactComponent as CloseIcon } from 'assets/close-icon.svg';
 import SliderNav from './SliderNav';
 //  ======================================== COMPONENT
 const TopNav = ({ withMenu }: { withMenu?: boolean }) => {
@@ -18,7 +17,7 @@ const TopNav = ({ withMenu }: { withMenu?: boolean }) => {
 		<>
 			<Navbar
 				expand='md'
-				className='justify-content-between justify-content-md-center border-bottom bg-white'
+				className='justify-content-between justify-content-md-center border-bottom bg-light'
 				fixed='top'
 				variant='light'>
 				<Navbar.Toggle onClick={handleToggleClick} />
@@ -31,7 +30,7 @@ const TopNav = ({ withMenu }: { withMenu?: boolean }) => {
 	) : (
 		<Navbar
 			expand='md'
-			className='justify-content-center border-bottom'
+			className='justify-content-center border-bottom bg-light'
 			fixed='top'
 			variant='light'>
 			<Logo />

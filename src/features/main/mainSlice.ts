@@ -6,6 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 import { fetchCharacters } from 'api';
 import { RootState } from 'reducers';
+import buildCacheKey from 'common/utils/buildCacheKey';
 import {
 	CharacterAPIResponse,
 	CharacterGender,
@@ -28,12 +29,8 @@ export const getCharacters = createAsyncThunk<
 	ThunkAPIReturnValue
 >('main/getCharacters', async (_, thunkAPI) => {
 	const { cache, currentPage, filters } = thunkAPI.getState().main;
-	const filtersQuery = Object.values(filters)
-		.sort()
-		.toString()
-		.toLowerCase()
-		.replace(/[^a-zA-Z0-9]/g, '');
-	const query = filtersQuery + currentPage;
+	const query = buildCacheKey(filters, currentPage);
+
 	if (cache.hasOwnProperty(query))
 		return {
 			data: { response: cache[query], query: '' },
@@ -72,7 +69,7 @@ const initialState = mainAdapter.getInitialState({
 	}
 } as MainState);
 
-//  ======================================== SLICES
+//  ======================================== SLICE
 const main = createSlice({
 	name: 'main',
 	initialState,
@@ -107,7 +104,7 @@ const main = createSlice({
 		builder.addCase(
 			getCharacters.fulfilled,
 			(state, { payload: { data, error, success } }) => {
-				if (data?.query) {
+				if (data?.query && !state.cache.hasOwnProperty(data.query)) {
 					state.cache[data.query] = success ? data.response : null;
 				}
 				if (success && data && data.response) {
@@ -116,16 +113,16 @@ const main = createSlice({
 					state.pages = pages;
 					mainAdapter.setAll(state, data.response.results);
 				} else {
-					state.asyncStatus = 'rejected';
 					state.asyncError = error;
+					state.asyncStatus = 'rejected';
 					state.pages = 0;
 					mainAdapter.setAll(state, []);
 				}
 			}
 		);
 		builder.addCase(getCharacters.rejected, (state) => {
-			state.asyncStatus = 'rejected';
 			state.asyncError = 'Something went wrong with our servers';
+			state.asyncStatus = 'rejected';
 			state.pages = 0;
 		});
 	}

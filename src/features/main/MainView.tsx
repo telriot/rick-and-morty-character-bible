@@ -20,7 +20,7 @@ import ScrollUpBtn from 'common/components/ScrollUpBtn';
 import Sidebar from 'common/components/Sidebar';
 import { useDebounce } from 'use-debounce';
 import { useMediaQuery } from 'react-responsive';
-import { useScrollPosition } from '@n8tb1t/use-scroll-position';
+import useScrollPosition from '@react-hook/window-scroll';
 //  ======================================== COMPONENT
 const MainView = () => {
 	//  ======================================== STATE
@@ -35,18 +35,10 @@ const MainView = () => {
 	const [debouncedName] = useDebounce(name, 300);
 
 	//  ======================================== HOOKS
-	const isMd = useMediaQuery({ query: '(min-device-width: 720px)' });
+	const isMd = useMediaQuery({ query: '(min-width: 720px)' });
 	const dispatch = useDispatch();
-	useScrollPosition(
-		({ currPos }) => {
-			const isFarFromTop = currPos.y < -700;
-			if (isFarFromTop === showScrollUpBtn) return;
-			if (isFarFromTop !== showScrollUpBtn)
-				setShowScrollUpBtn(isFarFromTop);
-		},
-		[showScrollUpBtn]
-	);
-
+	const scrollY = useScrollPosition();
+	console.log(isMd);
 	//  ======================================== HANDLERS
 	const handleSetPage = (page: number) => {
 		dispatch(currentPageSet(page));
@@ -59,18 +51,26 @@ const MainView = () => {
 	React.useEffect(() => {
 		dispatch(currentPageSet(1));
 		dispatch(getCharacters());
-	}, [debouncedName, gender, status]);
+	}, [debouncedName, dispatch, gender, status]);
+
+	React.useEffect(() => {
+		const isFarFromTop = scrollY > 700;
+		if (isFarFromTop === showScrollUpBtn) return;
+		if (isFarFromTop !== showScrollUpBtn) setShowScrollUpBtn(isFarFromTop);
+	}, [scrollY, showScrollUpBtn]);
 
 	//  ======================================== JSX
 	return (
-		<div>
+		<>
 			<TopNav withMenu />
-			<Container style={{ marginTop: '4rem' }}>
+			<Container as='main' style={{ marginTop: '4rem' }}>
 				<Row className='py-4'>
 					{/* LEFT COLUMN */}
-					<Col xs={12} md={3}>
-						<Sidebar />
-					</Col>
+					{isMd && (
+						<Col className='d-none d-md-flex' xs={12} md={3}>
+							<Sidebar />
+						</Col>
+					)}
 					{/* RIGHT COLUMN */}
 					<Col xs={12} md={9}>
 						<Row className='position-relative mb-2'>
@@ -110,10 +110,11 @@ const MainView = () => {
 				</Row>
 			</Container>
 			<ScrollUpBtn
+				variant='primary'
 				isVisible={showScrollUpBtn}
 				onClick={handleScrollToTop}
 			/>
-		</div>
+		</>
 	);
 };
 

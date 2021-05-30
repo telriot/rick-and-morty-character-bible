@@ -30,7 +30,7 @@ const initialState = {
 	episodes: null
 } as DetailState;
 
-//  ======================================== SLICES
+//  ======================================== SLICE
 const detail = createSlice({
 	name: 'detail',
 	initialState,
@@ -60,7 +60,6 @@ const detail = createSlice({
 });
 
 //  ======================================== EXPORTS
-export const {} = detail.actions;
 
 export const selectAsyncError = ({ detail }: RootState) => detail.asyncError;
 export const selectAsyncStatus = ({ detail }: RootState) => detail.asyncStatus;

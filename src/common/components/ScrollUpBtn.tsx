@@ -1,5 +1,5 @@
 //  ======================================== IMPORTS
-import { Button, Fade } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { ReactComponent as ChevronUp } from 'assets/chevron-up.svg';
 import { Variant } from 'react-bootstrap/esm/types';
 
@@ -17,16 +17,15 @@ const ScrollUpBtn = ({isVisible, onClick, variant='primary'} : ScrollUpBtnProps)
     //  ======================================== JSX
     return (
         <div
-        className='position-fixed'
-        style={{ bottom: '6rem', right: '2rem' }}>
-        <Fade in={isVisible}>
+        className={`position-fixed ${isVisible?'d-block':'d-none'}`}
+        style={{ bottom: '6rem', right: '2rem', opacity:.85 }}>
             <Button
                 onClick={onClick}
                 variant={variant}
-                aria-label='Back to top'>
+                aria-label='Back to top'
+                size='sm'>
                 <ChevronUp height='3rem' width='3rem' fill='#fff' />
             </Button>
-        </Fade>
     </div>
     )
 }

@@ -50,6 +50,7 @@ const Filters = () => {
 			<div className='position-relative'>
 				<FormControl
 					className='mb-3'
+					id='name-filter'
 					value={filters.name}
 					onChange={handleNameChange}
 					placeholder='Filter by name'

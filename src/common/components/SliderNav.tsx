@@ -19,14 +19,14 @@ const SliderNav = ({ children, isOpen, onClose }: SliderNavProps) => {
 			style={{
 				top: '4rem',
 				left: 0,
-				background: `${isOpen ? 'rgba(0,0,0,.3)' : 'transparent'}`,
+				background: `${isOpen ? 'rgba(0,0,0,.2)' : 'transparent'}`,
 				//@ts-ignore
 				pointerEvents: `${isOpen ? 'auto' : 'none'}`,
 				transition: 'background .3s',
 				zIndex: 1000
 			}}>
 			<div
-				className='h-100 px-2 py-3 bg-dark flex-grow-1'
+				className='h-100 px-2 py-3 bg-light flex-grow-1'
 				style={{
 					transform: `translateX(${isOpen ? '0%' : '-100%'})`,
 					transition: 'transform .3s'

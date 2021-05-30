@@ -12,6 +12,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Alert, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 import TopNav from 'common/components/TopNav';
 import FullSectionSpinner from 'common/components/FullSectionSpinner';
+import parseDate from 'common/utils/parseDate'
 
 //  ======================================== COMPONENT
 const DetailView = () => {
@@ -29,12 +30,13 @@ const DetailView = () => {
 	//  ======================================== EFFECTS
 	React.useEffect(() => {
 		id && dispatch(getCharacterDetail(id));
-	}, [id]);
+	}, [dispatch, id]);
+
 	//  ======================================== JSX
 	return (
 		<>
 			<TopNav />
-			<Container style={{ marginTop: '4rem' }}>
+			<Container as='main' style={{ marginTop: '4rem' }}>
 				{asyncError ? (
 					<div className='pt-4'>
 						<Alert className='w-100' variant='danger'>
@@ -55,7 +57,7 @@ const DetailView = () => {
 									<img
 										className='h-100 w-100 mb-4 mb-md-0'
 										src={character.image}
-										alt='Character detail'
+										alt={character.name}
 										style={{
 											maxHeight: '16em',
 											objectFit: 'contain'
@@ -73,7 +75,7 @@ const DetailView = () => {
 								<p>Type: {character.type}</p>
 								<p>Gender: {character.gender}</p>
 								<p>Origin: {character.origin.name}</p>
-								<p>Created: {character.created}</p>
+								<p>Created: {parseDate(character.created)}</p>
 							</Col>
 						</Row>
 						{/* BOTTOM SECTION */}

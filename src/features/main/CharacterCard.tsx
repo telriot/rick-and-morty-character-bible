@@ -22,8 +22,9 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
 				variant='top'
 				style={{ height: '12rem', objectFit: 'cover' }}
 				src={character.image}
+				alt={character.name}
 			/>
-			<Card.Body className='d-flex flex-column justify-content-between'>
+			<Card.Body className='d-flex flex-column justify-content-between bg-light'>
 				<div className='mb-3'>
 					<Card.Title>{character.name}</Card.Title>
 					<Card.Text className='mb-1'>
