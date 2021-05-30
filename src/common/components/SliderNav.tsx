@@ -36,18 +36,20 @@ const SliderNav = ({ children, isOpen, onClose }: SliderNavProps) => {
 			<div
 				className='h-100 px-2 py-3'
 				style={{
-					width: '4rem',
-					height: '4rem',
+					width: '4.5rem',
 					opacity: `${isOpen ? 1 : 0}`,
 					transform: `translateX(${isOpen ? '0%' : '100%'})`,
 					transition: 'transform .3s, opacity .3s'
 				}}>
-				<CloseIcon
+					<div className='bg-light p-1 rounded d-flex align-items-center justify-content-center'>
+					<CloseIcon
 					height='3rem'
 					width='3rem'
-					fill='#111'
+					fill='#555'
 					onClick={onClose}
 				/>
+					</div>
+
 			</div>
 		</div>
 	);
